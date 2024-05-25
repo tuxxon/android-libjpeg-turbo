@@ -52,3 +52,4 @@ INCLUDE_DIR=${SOURCE_DIR}/build/android/include
 mkdir -p $INCLUDE_DIR
 # Copy header files to the include directory
 cp ${SOURCE_DIR}/*.h $INCLUDE_DIR
+cp ${SOURCE_DIR}/build/*.h $INCLUDE_DIR
