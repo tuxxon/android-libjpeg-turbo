@@ -22,6 +22,7 @@ $ git clone --recursive https://github.com/tuxxon/android-libjpeg-turbo.git
 ### 2. Buid libjpeg-turbo for android
 
 ```
+$ cd android-libjpeg-turbo
 $ ./ndk-build.sh
 ```
 
