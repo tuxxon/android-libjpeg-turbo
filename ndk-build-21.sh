@@ -1,8 +1,8 @@
 # Set these variables to suit your needs
-NDK_PATH=$NDK/23.1.7779620
+NDK_PATH=$NDK/21.4.7075529
 TOOLCHAIN=clang
-ANDROID_VERSION=23
-ABIS=("arm64-v8a" "armeabi-v7a" "x86" "x86_64")  # 원하는 ABI 목록
+ANDROID_VERSION=21
+ABIS=("arm64-v8a" "armeabi-v7a" "x86" "x86_64")  # ABI list
 
 # Define the source directory
 CURRENT_DIR=$(pwd)
@@ -15,26 +15,17 @@ for ABI in "${ABIS[@]}"; do
     mkdir -p $BUILD_DIR
     cd $BUILD_DIR
 
-    # Set the correct compiler prefix based on ABI
-    if [ "$ABI" == "arm64-v8a" ]; then
-        COMPILER_PREFIX="aarch64-linux-android"
-    elif [ "$ABI" == "armeabi-v7a" ]; then
-        COMPILER_PREFIX="armv7a-linux-androideabi"
-    elif [ "$ABI" == "x86" ]; then
-        COMPILER_PREFIX="i686-linux-android"
-    elif [ "$ABI" == "x86_64" ]; then
-        COMPILER_PREFIX="x86_64-linux-android"
-    fi
-
     # Run CMake with the appropriate flags
     cmake -G"Unix Makefiles" \
         -DANDROID_ABI=${ABI} \
+        -DANDROID_ARM_MODE=arm \
         -DANDROID_PLATFORM=android-${ANDROID_VERSION} \
         -DANDROID_TOOLCHAIN=${TOOLCHAIN} \
+        -DCMAKE_ASM_FLAGS="--target=aarch64-linux-android${ANDROID_VERSION}" \
         -DCMAKE_TOOLCHAIN_FILE=${NDK_PATH}/build/cmake/android.toolchain.cmake \
         -DCMAKE_MAKE_PROGRAM=$(which make) \
-        -DCMAKE_C_COMPILER=${NDK_PATH}/toolchains/llvm/prebuilt/darwin-x86_64/bin/${COMPILER_PREFIX}${ANDROID_VERSION}-clang \
-        -DCMAKE_CXX_COMPILER=${NDK_PATH}/toolchains/llvm/prebuilt/darwin-x86_64/bin/${COMPILER_PREFIX}${ANDROID_VERSION}-clang++ \
+        -DCMAKE_C_COMPILER=${NDK_PATH}/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android${ANDROID_VERSION}-clang \
+        -DCMAKE_CXX_COMPILER=${NDK_PATH}/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android${ANDROID_VERSION}-clang++ \
         $SOURCE_DIR
 
     # Run make to build the project
@@ -45,6 +36,7 @@ for ABI in "${ABIS[@]}"; do
     mkdir -p $LIB_DIR
     cp *.so $LIB_DIR
     cp *.a $LIB_DIR
+
 done
 
 # Create include directory if it doesn't exist
