@@ -30,4 +30,17 @@ for ABI in "${ABIS[@]}"; do
 
     # Run make to build the project
     make
+
+    # Optionally, copy built libraries to a lib directory
+    LIB_DIR=${SOURCE_DIR}/build/android/libs/$ABI
+    mkdir -p $LIB_DIR
+    cp *.so $LIB_DIR
+    cp *.a $LIB_DIR
+
 done
+
+# Create include directory if it doesn't exist
+INCLUDE_DIR=${SOURCE_DIR}/build/android/include
+mkdir -p $INCLUDE_DIR
+# Copy header files to the include directory
+cp ${SOURCE_DIR}/*.h $INCLUDE_DIR
