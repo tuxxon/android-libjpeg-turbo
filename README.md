@@ -19,7 +19,7 @@ ABIS=("arm64-v8a" "armeabi-v7a" "x86" "x86_64")
 $ git clone --recursive https://github.com/tuxxon/android-libjpeg-turbo.git
 ```
 
-### 2. Buid libjpeg-turbo for android on macos
+### 2. Buid libjpeg-turbo for android
 
 ```
 $ ./ndk-build.sh
